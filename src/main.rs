@@ -1,5 +1,5 @@
-use std::*;
-use std::io::Write;
+use std::{env, fs};
+use std::io::{Write, stdout, stderr};
 use std::process::Command;
 
 fn main() {
@@ -18,8 +18,8 @@ fn main() {
         .expect("Failed to execute command");
 
     println!("status: {}", output.status);
-    io::stdout().write_all(&output.stdout).unwrap();
-    io::stderr().write_all(&output.stderr).unwrap();
+    stdout().write_all(&output.stdout).unwrap();
+    stderr().write_all(&output.stderr).unwrap();
 }
 
 fn get_work_directory(args: &Vec<String>) -> String {
