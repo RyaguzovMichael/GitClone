@@ -17,12 +17,12 @@ pub struct Config {
 impl Config {
     pub fn default() -> Option<Config> {
         Some(Config {
-            work_directory: dirs::home_dir() dirs::home_dir()?.join("code"),
+            work_directory: dirs::home_dir()?.join("code"),
         })
     }
 
     pub fn load() -> Result<Config, Error> {
-        let home_directory = match home::home_dir() {
+        let home_directory = match dirs::home_dir() {
             Some(dir) => String::from(dir.to_str().unwrap()),
             None => return Err(Error::from("Can't get home directory")),
         };

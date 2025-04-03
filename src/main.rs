@@ -1,8 +1,7 @@
+mod git;
 mod settings;
 
 use std::env;
-use std::io::{stderr, stdout, Write};
-use std::process::Command;
 
 use settings::Config;
 
@@ -30,23 +29,11 @@ fn main() {
         None => panic!("No work directory to push"),
     };
 
-    run_git_clone_command(&git_url, &target_directory);
+    git::run_git_clone_command(&git_url, &target_directory);
 }
 
 fn get_project_name(git_url: &str) -> &str {
     let start_index_of_project_name = git_url.rfind('/').unwrap() + 1;
     let end_index_of_project_name = git_url.rfind('.').unwrap();
     &git_url[start_index_of_project_name..end_index_of_project_name]
-}
-
-fn run_git_clone_command(git_url: &str, destination_path: &str) {
-    let output = Command::new("git")
-        .arg("clone")
-        .arg(git_url)
-        .arg(destination_path)
-        .output()
-        .expect("Failed to execute command");
-
-    stdout().write_all(&output.stdout).unwrap();
-    stderr().write_all(&output.stderr).unwrap();
 }
