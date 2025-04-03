@@ -1,17 +1,17 @@
+mod error;
+
 use std::{
     fs::{self, File},
-    io::{self, Read, Write},
+    io::{Read, Write},
     path::{Path, PathBuf},
 };
+
+use error::Error;
 
 const CONFIG_FILE_NAME: &str = "config";
 
 pub struct Config {
     pub work_directory: PathBuf,
-}
-
-pub struct Error {
-    pub message: String,
 }
 
 impl Config {
@@ -56,21 +56,5 @@ fn get_config_file(config_path: &PathBuf) -> Result<File, Error> {
         Ok(file)
     } else {
         Ok(File::open(&file_path)?)
-    }
-}
-
-impl From<io::Error> for Error {
-    fn from(value: io::Error) -> Self {
-        Self {
-            message: value.to_string(),
-        }
-    }
-}
-
-impl Error {
-    fn from(error_message: &str) -> Self {
-        Self {
-            message: String::from(error_message),
-        }
     }
 }
