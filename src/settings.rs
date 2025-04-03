@@ -17,7 +17,7 @@ pub struct Config {
 impl Config {
     pub fn default() -> Option<Config> {
         Some(Config {
-            work_directory: home::home_dir()?.join("code"),
+            work_directory: dirs::home_dir() dirs::home_dir()?.join("code"),
         })
     }
 

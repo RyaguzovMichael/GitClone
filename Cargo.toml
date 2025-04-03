@@ -9,4 +9,4 @@ name = "gclone"
 path = "src/main.rs"
 
 [dependencies]
-home = "0.5.9"
+dirs = "6.0.0"
