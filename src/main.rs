@@ -11,7 +11,7 @@ fn main() {
         Some(x) => x,
         None => panic!("Input git url is empty"),
     };
-    let project_name = git::get_project_name(git_url).to_lowercase();
+    let project_name = git::get_project_name(git_url).unwrap().to_lowercase();
     let settings = match Config::load() {
         Ok(config) => config,
         Err(error) => match Config::default() {
@@ -29,5 +29,5 @@ fn main() {
         None => panic!("No work directory to push"),
     };
 
-    git::clone(&git_url, &target_directory);
+    git::clone(&git_url, &target_directory).unwrap();
 }
