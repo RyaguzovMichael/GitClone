@@ -19,15 +19,11 @@ fn main() {
             None => panic!("{}", error.message),
         },
     };
-    let target_directory = match settings
-        .work_directory
-        .join(project_name)
-        .as_os_str()
-        .to_str()
-    {
-        Some(res) => String::from(res),
-        None => panic!("No work directory to push"),
-    };
+    let target_directory =
+        match settings.work_directory.join(project_name).as_os_str().to_str() {
+            Some(res) => String::from(res),
+            None => panic!("No work directory to push"),
+        };
 
     git::clone(&git_url, &target_directory).unwrap();
 }

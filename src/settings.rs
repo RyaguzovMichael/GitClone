@@ -16,9 +16,7 @@ pub struct Config {
 
 impl Config {
     pub fn default() -> Option<Config> {
-        Some(Config {
-            work_directory: dirs::home_dir()?.join("code"),
-        })
+        Some(Config { work_directory: dirs::home_dir()?.join("code") })
     }
 
     pub fn load() -> Result<Config, Error> {
@@ -26,7 +24,7 @@ impl Config {
             Some(dir) => String::from(dir.to_str().unwrap()),
             None => return Err(Error::from("Can't get home directory")),
         };
-        let config_path = Path::new(&home_directory).join(".config").join("gclone");
+        let config_path = Path::new(&home_directory).join(".config/gclone");
         let mut file = get_config_file(&config_path)?;
         let mut file_data = String::new();
         file.read_to_string(&mut file_data)?;
@@ -34,9 +32,7 @@ impl Config {
     }
 
     fn parse(file_data: &str) -> Result<Config, Error> {
-        Ok(Self {
-            work_directory: PathBuf::from(file_data),
-        })
+        Ok(Self { work_directory: PathBuf::from(file_data) })
     }
 }
 
@@ -50,7 +46,9 @@ fn get_config_file(config_path: &PathBuf) -> Result<File, Error> {
         let config = Config::default().unwrap();
         let config = match config.work_directory.to_str() {
             Some(res) => res,
-            None => return Err(Error::from("Can't create work directory default")),
+            None => {
+                return Err(Error::from("Can't create work directory default"));
+            }
         };
         file.write(config.as_bytes())?;
         Ok(file)
