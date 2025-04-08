@@ -1,29 +1,11 @@
-mod git;
-mod settings;
-
+use gclone::clone;
 use std::env;
-
-use settings::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let git_url = match args.get(1) {
-        Some(x) => x,
-        None => panic!("Input git url is empty"),
+    if let Some(git_url) = args.get(1) {
+        clone(git_url).expect("Internal error");
+        return;
     };
-    let project_name = git::get_project_name(git_url).unwrap().to_lowercase();
-    let settings = match Config::load() {
-        Ok(config) => config,
-        Err(error) => match Config::default() {
-            Some(default) => default,
-            None => panic!("{}", error.message),
-        },
-    };
-    let target_directory =
-        match settings.work_directory.join(project_name).as_os_str().to_str() {
-            Some(res) => String::from(res),
-            None => panic!("No work directory to push"),
-        };
-
-    git::clone(&git_url, &target_directory).unwrap();
+    println!("Do not enter git_url as argument!");
 }

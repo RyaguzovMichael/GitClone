@@ -1,25 +1,25 @@
-mod error;
-
 use std::{
     fs::{self, File},
     io::{Read, Write},
     path::{Path, PathBuf},
 };
 
-use error::Error;
+use crate::Error;
 
 const CONFIG_FILE_NAME: &str = "config";
 
-pub struct Config {
+pub(crate) struct Config {
     pub work_directory: PathBuf,
 }
 
 impl Config {
-    pub fn default() -> Option<Config> {
-        Some(Config { work_directory: dirs::home_dir()?.join("code") })
+    pub(crate) fn default() -> Option<Config> {
+        Some(Config {
+            work_directory: dirs::home_dir()?.join("code"),
+        })
     }
 
-    pub fn load() -> Result<Config, Error> {
+    pub(crate) fn load() -> Result<Config, Error> {
         let home_directory = match dirs::home_dir() {
             Some(dir) => String::from(dir.to_str().unwrap()),
             None => return Err(Error::from("Can't get home directory")),
@@ -32,7 +32,9 @@ impl Config {
     }
 
     fn parse(file_data: &str) -> Result<Config, Error> {
-        Ok(Self { work_directory: PathBuf::from(file_data) })
+        Ok(Self {
+            work_directory: PathBuf::from(file_data),
+        })
     }
 }
 
