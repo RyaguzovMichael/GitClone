@@ -3,6 +3,7 @@ use std::{
     io::{Read, Write},
     path::{Path, PathBuf},
 };
+use dirs::home_dir;
 
 use crate::Error;
 
@@ -15,12 +16,12 @@ pub(crate) struct Config {
 impl Config {
     pub(crate) fn default() -> Option<Config> {
         Some(Config {
-            work_directory: dirs::home_dir()?.join("code"),
+            work_directory: home_dir()?.join("code"),
         })
     }
 
     pub(crate) fn load() -> Result<Config, Error> {
-        let home_directory = match dirs::home_dir() {
+        let home_directory = match home_dir() {
             Some(dir) => String::from(dir.to_str().unwrap()),
             None => return Err(Error::from("Can't get home directory")),
         };
