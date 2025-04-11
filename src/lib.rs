@@ -13,7 +13,8 @@ pub fn clone(git_url: &str) -> Result<(), Error> {
         Some(name) => name.to_lowercase(),
         None => return Err(Error::from(INVALID_PROJECT_URL)),
     };
-    let settings = Config::load()?;
+    let settings = Config::load()?;    
+
     let target_directory = match settings
         .work_directory
         .join(project_name)

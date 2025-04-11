@@ -3,11 +3,13 @@ use std::{
     io::{self, ErrorKind, Read, Write},
     path::{Path, PathBuf},
 };
+use serde::{Deserialize, Serialize};
 
 use crate::Error;
 
-const CONFIG_FILE_NAME: &str = "config";
+const CONFIG_FILE_NAME: &str = "config.toml";
 
+#[derive(Serialize, Deserialize)]
 pub(crate) struct Config {
     pub work_directory: PathBuf,
 }
@@ -32,16 +34,13 @@ impl Config {
     }
 
     fn deserialize(file_data: &str) -> Result<Config, Error> {
-        Ok(Self {
-            work_directory: PathBuf::from(file_data),
-        })
+        toml::from_str(file_data)
+            .map_err(|_| Error::from("Can't be deserialize config"))
     }
 
     fn serialize(&self) -> Result<String, Error> {
-        match &self.work_directory.to_str() {
-            Some(res) => Ok(String::from(*res)),
-            None => return Err(Error::from("Error while serialize config")),
-        }
+        toml::to_string_pretty(self)
+            .map_err(|_| Error::from("Can't be serialize config"))
     }
 
     fn from_home_dir(home_dir: &Path) -> Self {
