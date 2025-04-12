@@ -11,7 +11,7 @@ const INVALID_CONFIG_DIRECTORY: &str = "No work directory to push";
 pub fn clone(git_url: &str) -> Result<(), Error> {
     let project_name = match git::get_project_name(git_url) {
         Some(name) => name.to_lowercase(),
-        None => return Err(Error::from(INVALID_PROJECT_URL)),
+        None => return Err(Error::new(INVALID_PROJECT_URL)),
     };
     let settings = Config::load()?;
 
@@ -22,7 +22,7 @@ pub fn clone(git_url: &str) -> Result<(), Error> {
         .to_str()
     {
         Some(res) => String::from(res),
-        None => return Err(Error::from(INVALID_CONFIG_DIRECTORY)),
+        None => return Err(Error::new(INVALID_CONFIG_DIRECTORY)),
     };
 
     git::clone(&git_url, &target_directory)?;

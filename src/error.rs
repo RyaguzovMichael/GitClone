@@ -1,4 +1,4 @@
-use std::io;
+use std::{error, fmt, io};
 
 #[derive(Debug)]
 pub struct Error {
@@ -8,6 +8,12 @@ pub struct Error {
 impl Error {
     pub fn message(&self) -> &String {
         return &self.message;
+    }
+
+    pub(crate) fn new(message: &str) -> Self {
+        Self {
+            message: String::from(message)
+        }
     }
 }
 
@@ -19,10 +25,10 @@ impl From<io::Error> for Error {
     }
 }
 
-impl From<&str> for Error {
-    fn from(value: &str) -> Self {
-        Self {
-            message: String::from(value),
-        }
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Application exception because: {}", self.message)
     }
 }
+
+impl error::Error for Error {}

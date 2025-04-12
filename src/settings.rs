@@ -29,18 +29,18 @@ impl Config {
                 };
                 Ok(config)
             }
-            None => Err(Error::from("Can't get home directory")),
+            None => Err(Error::new("Can't get home directory")),
         }
     }
 
-    fn deserialize(file_data: &str) -> Result<Config, Error> {
+    fn deserialize(file_data: &str) -> Result<Self, Error> {
         toml::from_str(file_data)
-            .map_err(|e| Error::from(format!("Can't be deserialize config: {}", e).as_str()))
+            .map_err(|e| Error::new(format!("Can't be deserialize config: {}", e).as_str()))
     }
 
     fn serialize(&self) -> Result<String, Error> {
         toml::to_string_pretty(self)
-            .map_err(|e| Error::from(format!("Can't be serialize config: {}", e).as_str()))
+            .map_err(|e| Error::new(format!("Can't be serialize config: {}", e).as_str()))
     }
 
     fn from_home_dir(home_dir: &Path) -> Self {
